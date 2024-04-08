@@ -7,13 +7,12 @@ async function get<TBody>(relativeUrl: string): Promise<TBody> {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization: `Bearer${configuration.apiToken}`,
+      Authorization: `Bearer ${configuration.apiToken}`,
     },
   };
 
   const response = await fetch(`${apiBasePath}${relativeUrl}`, options);
   const json: TBody = await response.json();
-
   return json;
 }
 
