@@ -11,7 +11,7 @@ interface MovieCardProps {
   enableUserActions?: boolean;
 }
 
-export function MovieCard({ id, title, overview, popularity, enableUserActions, image }: MovieCardProps) {
+export function MovieCard({ id, title, overview, popularity, enableUserActions, image = "/movie-thumb.png" }: MovieCardProps) {
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <CardMedia component="div" image={image} sx={{ pt: "56.25%" }} />
