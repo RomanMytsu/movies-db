@@ -1,5 +1,16 @@
 import { FilterAltOutlined } from "@mui/icons-material";
-import { Autocomplete, Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Paper, TextField, debounce } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Paper,
+  TextField,
+  debounce,
+} from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { KeywordItem, client } from "../../api/tmdb";
 import { useMemo, useState } from "react";
@@ -26,20 +37,18 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
 
   const genres = useAppSelector((state) => state.movies.genres);
 
-  const fetchKeywords = useMemo(
-    () =>
-      debounce(async (query: string) => {
-        if (query) {
-          setKeywordsLoading(true);
-          const options = await client.getKeywords(query);
-          setKeywordsLoading(false);
-          setKeywordsOptions(options);
-        } else {
-          setKeywordsOptions([]);
-        }
-      }, 1000),
-    []
-  );
+  const fetchKeywordsOptions = async (query: string) => {
+    if (query) {
+      setKeywordsLoading(true);
+      const options = await client.getKeywords(query);
+      setKeywordsLoading(false);
+      setKeywordsOptions(options);
+    } else {
+      setKeywordsOptions([]);
+    }
+  };
+
+  const debouncedFetchKeywordsOptions = useMemo(() => debounce(fetchKeywordsOptions, 1000), []);
 
   return (
     <Paper sx={{ m: 2, p: 0.5 }}>
@@ -60,7 +69,7 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
                 value={value}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 renderInput={(params) => <TextField {...params} label="keywords" />}
-                onInputChange={(_, value) => fetchKeywords(value)}
+                onInputChange={(_, value) => debouncedFetchKeywordsOptions(value)}
               />
             )}
           />
