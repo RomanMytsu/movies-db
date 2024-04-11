@@ -2,12 +2,13 @@ import { connect } from "react-redux";
 import { Movie, fetchNexPage, resetMovies } from "../../reducers/movies";
 import { RootState } from "../../store";
 import MovieCard from "./MovieCard";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { Suspense, lazy, useCallback, useContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { Container, Grid, LinearProgress } from "@mui/material";
 import { AuthContext, anonymousUser } from "../../AuthContext";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
-import { Filters, MoviesFilter } from "./MoviesFilter";
+
+const MoviesFilter = lazy(() => import("./MoviesFilter"));
 
 interface MoviesProps {
   movies: Movie[];
@@ -15,7 +16,7 @@ interface MoviesProps {
 }
 
 function Movies({ movies, loading }: MoviesProps) {
-  const [filters, setFilters] = useState<Filters>();
+  const [filters, setFilters] = useState<any>();
   const dispatch = useAppDispatch();
   const { user } = useContext(AuthContext);
   const loggedIn = user !== anonymousUser;
@@ -31,7 +32,7 @@ function Movies({ movies, loading }: MoviesProps) {
     if (entry?.isIntersecting && hasMorePages) {
       const moviesFilter = filters
         ? {
-            keywords: filters.keywords.map((k) => k.id),
+            keywords: filters.keywords.map((k: any) => k.id),
             genres: filters?.genres,
           }
         : undefined;
@@ -49,12 +50,14 @@ function Movies({ movies, loading }: MoviesProps) {
   return (
     <Grid container spacing={2} sx={{ flexWrap: "nowrap" }}>
       <Grid item xs="auto">
-        <MoviesFilter
-          onApply={(f) => {
-            dispatch(resetMovies());
-            setFilters(f);
-          }}
-        />
+        <Suspense>
+          <MoviesFilter
+            onApply={(f) => {
+              dispatch(resetMovies());
+              setFilters(f);
+            }}
+          />
+        </Suspense>
       </Grid>
       <Grid item xs={12}>
         <Container sx={{ py: 8 }} maxWidth="lg">
