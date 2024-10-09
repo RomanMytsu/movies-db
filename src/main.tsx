@@ -7,7 +7,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
-import { About } from "./features/About/About.tsx";
+import  About  from "./features/About/About.tsx";
 import Movies from "./features/Movies/Movies.tsx";
 import store from "./store";
 import Home from "./features/Home/Home.tsx";
