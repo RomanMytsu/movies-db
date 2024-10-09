@@ -10,22 +10,31 @@ import App from "./App.tsx";
 import { About } from "./features/About/About.tsx";
 import Movies from "./features/Movies/Movies.tsx";
 import store from "./store";
+import Home from "./features/Home/Home.tsx";
+
+function AppEntrypoint() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+}
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <Provider store={store}>
-        <App />
-      </Provider>
-    ),
+    element: <AppEntrypoint />,
     children: [
       {
-        path: "/movies",
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "movies",
         element: <Movies />,
       },
       {
-        path: "/about",
+        path: "about",
         element: <About />,
       },
     ],
