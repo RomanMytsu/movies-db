@@ -4,7 +4,12 @@ import { Link as RouterLink } from "react-router-dom";
 import { useContext } from "react";
 import { anonymousUser, AuthContext } from "./AuthContext";
 
-export function AppHeader() {
+interface AppHeaderProps {
+  onLogin(): void;
+  onLogout(): void;
+}
+
+export function AppHeader({ onLogin, onLogout }: AppHeaderProps) {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -19,13 +24,18 @@ export function AppHeader() {
             <HeaderLink to="/about">About</HeaderLink>
           </nav>
         </Box>
-        <AuthSection />
+        <AuthSection onLogin={onLogin} onLogout={onLogout} />
       </Toolbar>
     </AppBar>
   );
 }
 
-function AuthSection() {
+interface AuthSectionProps {
+  onLogin(): void;
+  onLogout(): void;
+}
+
+function AuthSection({ onLogin, onLogout }: AuthSectionProps) {
   const auth = useContext(AuthContext);
   const loggedIn = auth.user !== anonymousUser;
 
@@ -33,14 +43,14 @@ function AuthSection() {
     return (
       <>
         <Typography>Hello, {auth.user.name}!</Typography>
-        <Button color="inherit" variant="outlined" sx={{ ml: 1.5 }}>
+        <Button color="inherit" variant="outlined" sx={{ ml: 1.5 }} onClick={onLogout}>
           Log out
         </Button>
       </>
     );
   }
   return (
-    <Button color="inherit" variant="outlined">
+    <Button color="inherit" variant="outlined" onClick={onLogin}>
       Log in
     </Button>
   );
