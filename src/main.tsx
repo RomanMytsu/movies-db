@@ -1,16 +1,19 @@
+/* eslint-disable react-refresh/only-export-components */
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { StrictMode } from "react";
+import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
-import  About  from "./features/About/About.tsx";
-import Movies from "./features/Movies/Movies.tsx";
+import About from "./features/About/About.tsx";
 import store from "./store";
 import Home from "./features/Home/Home.tsx";
+import { LinearProgress } from "@mui/material";
+
+const Movies = lazy(() => import("./features/Movies/Movies"));
 
 function AppEntrypoint() {
   return (
@@ -31,7 +34,11 @@ const router = createBrowserRouter([
       },
       {
         path: "movies",
-        element: <Movies />,
+        element: (
+          <Suspense fallback={<LinearProgress sx={{ mt: 1 }} />}>
+            <Movies />
+          </Suspense>
+        ),
       },
       {
         path: "about",

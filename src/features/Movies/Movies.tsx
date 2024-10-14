@@ -5,9 +5,9 @@ import { Container, Grid, LinearProgress, Typography } from "@mui/material";
 import { fetchNextPage, resetMovies } from "./moviesSlice";
 import { AuthContext, anonymousUser } from "../../AuthContext";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
-import { Filters, MoviesFilter } from "./MoviesFilter";
+import MoviesFilter, { Filters } from "./MoviesFilter";
 
-function Movies() {
+export default function Movies() {
   const dispatch = useAppDispatch();
   const movies = useAppSelector((state) => state.movies.top);
   const loading = useAppSelector((state) => state.movies.loading);
@@ -76,5 +76,3 @@ function Movies() {
     </Grid>
   );
 }
-
-export default Movies;
