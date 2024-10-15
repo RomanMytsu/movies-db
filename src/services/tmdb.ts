@@ -12,16 +12,16 @@ interface MovieDetails {
   title: string;
   overview: string;
   popularity: number;
-  backdrop_path?: string | null;
+  backdrop_path?: string;
 }
 
 interface MovieState {
   results: MovieDetails[];
-  page: number;
+  lastPage: number;
   hasMorePages: boolean;
 }
 
-interface MoviesFilters {
+export interface MoviesFilters {
   keywords?: number[];
   genres?: number[];
 }
@@ -31,7 +31,7 @@ export interface MoviesQuery {
   filters: MoviesFilters;
 }
 
-interface KeywordItem {
+export interface KeywordItem {
   id: number;
   name: string;
 }
@@ -81,9 +81,24 @@ export const tmdbApi = createApi({
       transformResponse(response: PageResponse<MovieDetails>, _, arg) {
         return {
           results: response.results,
-          page: response.page,
+          lastPage: response.page,
           hasMorePages: arg.page < response.total_pages,
         };
+      },
+      serializeQueryArgs({ endpointName }) {
+        return endpointName;
+      },
+      merge(currentCacheData, responseData) {
+        if (responseData.lastPage === 1) {
+          currentCacheData.results = responseData.results;
+        } else {
+          currentCacheData.results.push(...responseData.results);
+        }
+        currentCacheData.lastPage = responseData.lastPage;
+        currentCacheData.hasMorePages = responseData.hasMorePages;
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
       },
     }),
     getKeywords: builder.query<KeywordItem[], string>({
