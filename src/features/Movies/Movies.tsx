@@ -6,12 +6,22 @@ import { fetchNextPage, resetMovies } from "./moviesSlice";
 import { AuthContext, anonymousUser } from "../../AuthContext";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 import MoviesFilter, { Filters } from "./MoviesFilter";
+import { MoviesQuery, useGetConfigurationQuery, useGetMoviesQuery } from "../../services/tmdb";
+
+const initialQuery: MoviesQuery = {
+  page: 1,
+  filters: {},
+};
 
 export default function Movies() {
+  const [query, setQuery] = useState<MoviesQuery>(initialQuery);
+
+  const { data: configuration } = useGetConfigurationQuery();
+  const { data, isFetching } = useGetMoviesQuery(query);
+
   const dispatch = useAppDispatch();
-  const movies = useAppSelector((state) => state.movies.top);
-  const loading = useAppSelector((state) => state.movies.loading);
-  const hasMorePages = useAppSelector((state) => state.movies.hasMorePages);
+  const movies = data?.results;
+  const hasMorePages = data.hasMorePages;
   const [filters, setFilters] = useState<Filters>();
 
   const { user } = useContext(AuthContext);
