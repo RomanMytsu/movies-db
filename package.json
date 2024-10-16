@@ -17,6 +17,8 @@
     "@mui/material": "^6.1.2",
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.3.0",
+    "@rtk-query/graphql-request-base-query": "^2.3.1",
+    "graphql": "^16.9.0",
     "leaflet": "^1.9.4",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",

@@ -12,6 +12,8 @@ import About from "./features/About/About.tsx";
 import store from "./store";
 import Home from "./features/Home/Home.tsx";
 import { LinearProgress } from "@mui/material";
+import { Extra } from "./features/Extra/Extra.tsx";
+
 
 const Movies = lazy(() => import("./features/Movies/Movies"));
 
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
             <Movies />
           </Suspense>
         ),
+      },
+      {
+        path: "extra",
+        element: <Extra />,
       },
       {
         path: "about",
