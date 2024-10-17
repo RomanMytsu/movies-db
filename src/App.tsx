@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { teal } from "@mui/material/colors";
-import { AppHeader } from "./AppHeader";
+import { AppHeader } from "./features/Header/AppHeader";
 import { anonymousUser, AuthContext, AuthInfo } from "./AuthContext";
 import { useState } from "react";
 

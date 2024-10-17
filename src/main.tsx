@@ -13,15 +13,21 @@ import store from "./store";
 import Home from "./features/Home/Home.tsx";
 import { LinearProgress } from "@mui/material";
 import { Extra } from "./features/Extra/Extra.tsx";
-
+import { StatefulAuthProvider } from "./auth/StatefulAuthProvider.tsx";
+import { AuthCallback } from "./auth/AuthCallback.tsx";
+import { Profile } from "./features/Profile/Profile.tsx";
+import { AuthenticationGuard } from "./auth/AuthenticatedGuard.tsx";
+import { Protected } from "./features/Protected/Protected.tsx";
 
 const Movies = lazy(() => import("./features/Movies/Movies"));
 
 function AppEntrypoint() {
   return (
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <StatefulAuthProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </StatefulAuthProvider>
   );
 }
 
@@ -43,12 +49,24 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "extra",
+        path: "/extra",
         element: <Extra />,
       },
       {
-        path: "about",
+        path: "/profile",
+        element: <AuthenticationGuard component={Profile} />,
+      },
+      {
+        path: "/protected",
+        element: <AuthenticationGuard component={Protected} />,
+      },
+      {
+        path: "/about",
         element: <About />,
+      },
+      {
+        path: "/callback",
+        element: <AuthCallback />,
       },
     ],
   },
